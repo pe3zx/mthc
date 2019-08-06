@@ -1,0 +1,112 @@
+---
+version: "2"
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./certs/:/etc/nginx/certs/
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - mthc
+
+  misp-db:
+    image: mysql/mysql-server:5.7
+    restart: unless-stopped
+    volumes:
+      - ./data/misp/db:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=misp
+      - MYSQL_USER=misp
+      - MYSQL_PASSWORD=misp
+      - MYSQL_ROOT_PASSWORD=misp
+    networks:
+      - mthc
+
+  misp-web:
+    build: apps/misp-docker/web
+    image: misp:latest
+    restart: unless-stopped
+    volumes:
+      - /dev/urandom/:/dev/random
+      - ./data/misp/web:/var/www/MISP
+    environment:
+      - MYSQL_HOST=misp-db
+      - MYSQL_DATABASE=misp
+      - MYSQL_USER=misp
+      - MYSQL_PASSWORD=misp
+      - MISP_ADMIN_EMAIL=admin@admin.test
+      - MISP_ADMIN_PASSPHRASE=admin
+      - MISP_BASEURL=http:\/\/misp\.test
+      - POSTFIX_RELAY_HOST=relay.fqdn
+      - TIMEZONE=Europe/Brussels
+      - VIRTUAL_HOST=misp.ir.local
+    networks:
+      mthc:
+        ipv4_address: 172.16.0.10
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.0
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=0.0.0.0
+      - xpack.security.enabled=false
+      - cluster.name=hive
+      - script.inline=true
+      - thread_pool.index.queue_size=100000
+      - thread_pool.search.queue_size=100000
+      - thread_pool.bulk.queue_size=100000
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./data/elasticsearch:/usr/share/elasticsearch/data
+    networks:
+      mthc:
+        ipv4_address: 172.16.0.9
+  
+  cortex:
+    image: thehiveproject/cortex:latest
+    depends_on:
+      - elasticsearch 
+    expose:
+      - "9001"
+    volumes:
+      - ./conf/cortex.conf:/etc/cortex/application.conf
+      - ./apps/Cortex-Analyzers:/opt/Cortex-Analyzers
+    environment:
+      - VIRTUAL_HOST=cortex.ir.local
+      - VIRTUAL_PORT=9001
+    networks:
+      mthc:
+        ipv4_address: 172.16.0.11
+
+  thehive:
+    image: thehiveproject/thehive:latest
+    depends_on:
+      - elasticsearch
+      - cortex
+    expose:
+      - "9000"
+    volumes:
+      - ./conf/thehive.conf:/etc/thehive/application.conf
+    environment:
+      - VIRTUAL_HOST=thehive.ir.local
+      - VIRTUAL_PORT=9000
+    networks:
+      mthc:
+        ipv4_address: 172.16.0.12
+
+networks:
+  mthc:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.0.0/24
+          gateway: 172.16.0.2
