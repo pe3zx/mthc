@@ -1,0 +1,4 @@
+*.crt
+*.key
+data/misp/*
+data/elasticsearch/*
