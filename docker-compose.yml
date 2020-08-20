@@ -80,6 +80,7 @@ services:
     volumes:
       - ./conf/cortex.conf:/etc/cortex/application.conf
       - ./apps/Cortex-Analyzers:/opt/Cortex-Analyzers
+      - ./data/cortex/:/data
     environment:
       - VIRTUAL_HOST=cortex.ir.local
       - VIRTUAL_PORT=9001
