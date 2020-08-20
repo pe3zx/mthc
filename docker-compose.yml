@@ -70,11 +70,11 @@ services:
     networks:
       mthc:
         ipv4_address: 172.16.0.9
-  
+
   cortex:
     image: thehiveproject/cortex:latest
     depends_on:
-      - elasticsearch 
+      - elasticsearch
     expose:
       - "9001"
     volumes:
