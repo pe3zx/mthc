@@ -23,30 +23,30 @@ jobs:
       - name: Gathering cortex service status
         env:
           cortex_status: ${{ docker inspect -f {{.State.Running}} $(docker ps -f name=mthc_cortex_1 --quiet) }}
-        run: echo "cortex service status: ${cortex_status}"
+        run: echo "cortex service status: $cortex_status"
       - name: Gathering thehive service status
         env:
           thehive_status: ${{ docker inspect -f {{.State.Running}} $(docker ps -f name=mthc_thehive_1 --quiet) }}
-        run: echo "thehive service status: ${thehive_status}"
+        run: echo "thehive service status: $thehive_status"
       - name: Gathering misp-web service status
         env:
           mispweb_status: ${{ docker inspect -f {{.State.Running}} $(docker ps -f name=mthc_misp-web_1 --quiet) }}
-        run: echo "misp-web service status: ${mispweb_status}"
+        run: echo "misp-web service status: $mispweb_status"
       - name: Gathering elasticsearch service status
         env:
           elasticsearch_status: ${{ docker inspect -f {{.State.Running}} $(docker ps -f name=mthc_elasticsearch_1 --quiet) }}
-        run: echo "elasticsearch service status: ${elasticsearch_status}"
+        run: echo "elasticsearch service status: $elasticsearch_status"
       - name: Gathering nginx-proxy service status
         env:
           proxy_status: ${{ docker inspect -f {{.State.Running}} $(docker ps -f name=mthc_nginx-proxy_1 --quiet) }}
-        run: echo "nginx-proxy service status: ${proxy_status}"
+        run: echo "nginx-proxy service status: $proxy_status"
       - name: Gathering misp-db service status
         env:
           mispdb_status: ${{ docker inspect -f {{.State.Running}} $(docker ps -f name=mthc_misp-db_1 --quiet) }}
-        run: echo "misp-db service status: ${mispdb_status}"
+        run: echo "misp-db service status: $mispdb_status"
       - name: Validating all statuses
         run: |
-          if ${cortex_status} && ${thehive_status} && ${mispweb_status} && ${elasticsearch_status} && ${proxy_status} && ${mispdb_status}; then
+          if $cortex_status && $thehive_status && $mispweb_status && $elasticsearch_status && $proxy_status && $mispdb_status; then
             exit 0
           else
             exit 1
