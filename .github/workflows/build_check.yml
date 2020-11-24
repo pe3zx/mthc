@@ -21,9 +21,9 @@ jobs:
         with:
           time: '300s'
       - name: Gathering cortex service status
-        env:
-          cortex_status: ${{ docker inspect -f {{.State.Running}} $(docker ps -f name=mthc_cortex_1 --quiet) }}
-        run: echo "cortex service status: $cortex_status"
+        run: |
+          echo "{cortext_status}={docker inspect -f {{.State.Running}} $(docker ps -f name=mthc_cortex_1 --quiet)}" >> $GITHUB_ENV
+          echo "cortex service status: $cortex_status"
       - name: Gathering thehive service status
         env:
           thehive_status: ${{ docker inspect -f {{.State.Running}} $(docker ps -f name=mthc_thehive_1 --quiet) }}
