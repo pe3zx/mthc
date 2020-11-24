@@ -20,7 +20,7 @@ jobs:
       - name: Waiting for stack to build....
         uses: jakejarvis/wait-action@master
         with:
-          time: '300s'
+          time: '60s'
       - name: Gathering cortex service status
         run: |
           echo "{cortext_status}={docker inspect -f {{.State.Running}} $(docker ps -f name=mthc_cortex_1 --quiet)}" >> $GITHUB_ENV
