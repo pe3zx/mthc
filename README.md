@@ -3,7 +3,7 @@
 </p>
 
 
-# mthc
+# mthc ![mthc](https://github.com/pe3zx/mthc/workflows/mthc/badge.svg?branch=master&event=workflow_dispatch)
 
 **mthc** orginally came from **M**ISP, **T**heHive and **C**ortex. It is intentionally built to automatically deploy [MISP](https://www.misp-project.org/), [TheHive](https://thehive-project.org/#section_thehive) and [Cortex](https://thehive-project.org/#section_cortex) in one shot. By the way, due to limitiation from each platform, I cannot find a way truly automate the build process without manual configuration. Some processes such as registration and grabbing/providing API keys still required human interaction.
 
