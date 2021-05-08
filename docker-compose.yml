@@ -102,6 +102,7 @@ services:
     networks:
       mthc:
         ipv4_address: 172.16.0.12
+    command: --cortex-key=<key>
 
 networks:
   mthc:
