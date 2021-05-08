@@ -12,6 +12,18 @@ services:
     networks:
       - mthc
 
+  redis:
+    image: bitnami/redis:latest
+    ports:
+      - 6379
+    volumes:
+      - ./data/redis:/bitnami/redis/data/
+    environment:
+      - REDIS_PASSWORD=password
+    networks:
+      mthc:
+        ipv4_address: 172.16.0.13
+
   misp-db:
     image: mysql/mysql-server:5.7
     restart: unless-stopped
