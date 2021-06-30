@@ -9,6 +9,11 @@
 
 **mthc** comes with built-in reverse proxy that can be used to support either plain HTTP or HTTP with SSL/TLS. [FiloSottile/mkcert](https://pe3zx.blogspot.com/2019/01/deploy-your-own-local-misp-with-https.html) provides a simple way to generate locally trusted certificates for testing.
 
+## Status
+
+**mthc** depends on components to build. These are including [my misp-docker](https://github.com/pe3zx/misp-docker), TheHive image, Cortex image in mandatory.
+
+To ensure about project's integrity, **mthc** is configured for build verification test by [Actions workflow](https://github.com/pe3zx/mthc/actions/workflows/build_check.yml). All dependencies are pulled, built and checked each of service' status every month. I will be notified if something goes wrong.
 
 ## Deployment
 
