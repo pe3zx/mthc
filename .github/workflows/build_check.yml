@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v1
-      - name: Checkout submodules
-        uses: textbook/git-checkout-submodule-action@master
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: Increase limits on mmapfs on host for Elasticsearch
         run: echo -e "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf; sudo sysctl -p
       - name: Build the stack
